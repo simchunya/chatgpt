@@ -11,27 +11,35 @@ import constants
 
 def main():
     os.environ["OPENAI_API_KEY"] = constants.APIKEY
-
+    query = listening_ear()
+    reply = meaning_of_life(query)
     #query = input("What is your query\n")
     #print(query)
-    while True:
-        listener = speech_recognition.Recognizer()
-        speaker = pyttsx3.init()
-        with speech_recognition.Microphone() as mic:
-            print("robot: I'm listening")
-            audio = listener.listen(mic)
-            print("finished listening")
-        try:
-            query = listener.recognize_google(audio)
-        except:
-            query = "error i cant hear"
-        print("You said: " + query)
-        #loader = TextLoader('data.txt')
-        loader = DirectoryLoader(".", glob = "*.txt")
-        index = VectorstoreIndexCreator().from_loaders([loader])
-        reply = (index.query(query, llm = ChatOpenAI()))
-        speaker.say(reply)
+    speaker = pyttsx3.init()
+    print(reply)
+    speaker.say(reply)
 
+def listening_ear():
+    listener = speech_recognition.Recognizer()
+    with speech_recognition.Microphone() as mic:
+        print("robot: I'm listening")
+        audio = listener.listen(mic)
+        print("finished listening")
+    try:
+        query = listener.recognize_google(audio)
+    except:
+        query = "error i cant hear"
+    print("You said: " + query)
+    return(str(query))
+
+def meaning_of_life(query):
+    
+    #loader = TextLoader('data.txt')
+    loader = DirectoryLoader(".", glob = "*.txt")
+    index = VectorstoreIndexCreator().from_loaders([loader])
+    reply = (index.query(query, llm = ChatOpenAI()))
+    
+    return(reply)
 
 if __name__ == "__main__":
     main()
