@@ -17,7 +17,7 @@ def main():
     #loader = TextLoader('data.txt')
     loader = DirectoryLoader(pathlib.Path("."), glob = "*.txt")
     index = VectorstoreIndexCreator().from_loaders([loader])
-    reply = (index.query(query, llm = ChatOpenAI()))
+    reply = (index.query(query, llm = ChatOpenAI(model_name="gpt-3.5-turbo")))
     print(reply)
     #with open('readme.txt', 'w') as f:
         #f.write(f' this is the reply: {reply}')
